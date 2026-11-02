@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryuma Kojima</title>
+    <link rel="icon" type="image/jpeg" href="https://pbs.twimg.com/media/GnJQLR1bcAAxfy1?format=jpg&name=360x360">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ============================ */
+        /* === Utility === */
+        /* ============================ */
+        .hidden {
+            display: none;
+        }
+
+        /* ANIMATION STYLES */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #eaeaea;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .intro-goal {
+            position: absolute;
+            left: 8%;
+            top: 32%;
+            width: clamp(140px, 28vmin, 260px);
+            height: auto;
+            transform: scaleX(-1);
+            z-index: 2;
+        }
+
+        .intro-shooter {
+            position: absolute;
+            right: 5%;
+            top: 4%;
+            width: clamp(110px, 22vmin, 210px);
+            height: auto;
+            transform: scaleX(-1);
+            z-index: 2;
+        }
+
+        .intro-ball {
+            position: absolute;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 1;
+            display: none;
+        }
+        
+        /* ================================== */
+        /* === Table of Contents - Desktop === */
+        /* ================================== */
+        .table-of-contents {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 100;
+            border: 1px solid var(--border);
+        }
+        .table-of-contents h4 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .table-of-contents ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .table-of-contents li {
+            margin-bottom: 0.8rem;
+        }
+        .table-of-contents li:last-child {
+            margin-bottom: 0;
+        }
+        .table-of-contents a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .table-of-contents a:hover {
+            color: var(--link);
+        }
+
+        @media (max-width: 1200px) {
+            .table-of-contents {
+                display: none;
+            }
+        }
+
+        /* ================================== */
+        /* === Mobile Sticky Header & Menu === */
+        /* ================================== */
+        .mobile-sticky-header, .mobile-side-menu, .menu-backdrop {
+            display: none; 
+        }
+
+        @media (max-width: 768px) {
+            .mobile-sticky-header {
+                display: flex;
+                position: fixed;
+                top: -70px; 
+                left: 0;
+                width: 100%;
+                height: 60px;
+                background-color: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 2000;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 1.5rem;
+                box-sizing: border-box;
+                transition: top 0.3s ease;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .mobile-sticky-header.visible {
+                top: 0;
+            }
+
+            .sticky-title {
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: var(--text);
+            }
+
+            .hamburger {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+            .hamburger div {
+                width: 25px;
+                height: 3px;
+                background-color: var(--text);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-side-menu {
+                display: flex;
+                position: fixed;
+                top: 0;
+                right: -260px; 
+                width: 260px;
+                height: 100vh;
+                background-color: var(--card-bg);
+                z-index: 2002;
+                box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+                transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                flex-direction: column;
+                padding: 2rem 1.5rem;
+                box-sizing: border-box;
+            }
+
+            .mobile-side-menu.open {
+                right: 0;
+            }
+
+            .menu-close {
+                align-self: flex-end;
+                font-size: 2rem;
+                cursor: pointer;
+                color: var(--light-text);
+                line-height: 1;
+                margin-bottom: 2rem;
+                transition: color 0.2s ease;
+            }
+            .menu-close:hover {
+                color: var(--text);
+            }
+
+            .side-nav {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .side-nav-link {
+                text-decoration: none;
+                color: var(--light-text);
+                font-size: 1.1rem;
+                transition: all 0.2s ease;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .side-nav-link.active-nav-item {
+                font-weight: 700;
+                color: var(--link);
+                border-bottom: 2px solid var(--link);
+            }
+
+            .menu-backdrop {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0,0,0,0.4);
+                z-index: 2001;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                backdrop-filter: blur(2px);
+            }
+
+            .menu-backdrop.visible {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        /* BASE STYLES */
+        :root {
+            --text: #333333;
+            --light-text: #666666;
+            --link: #0066cc;
+            --bg: #eaeaea;
+            --card-bg: #ffffff;
+            --border: #dddddd;
+            --header-bg: #ffffff;
+            --item-bg: #eaeaea; 
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            color: var(--text);
+            background-color: var(--bg);
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 2rem;
+            margin: -2rem -1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .portrait {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 3px solid var(--border);
+            display: block;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .photo-container {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .content-photo {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            max-height: 300px;
+        }
+
+        /* Maker Portfolio */
+        .maker-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 900px) {
+            .maker-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .maker-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .maker-card {
+            background-color: var(--item-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        .maker-card img {
+            width: 100%;
+            height: 150px; 
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+        .maker-card h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+        .maker-card p {
+            font-size: 0.9rem;
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .st-ongoing { background-color: var(--link); }
+        .st-finished { background-color: #28a745; }
+        
+        .action-btn {
+            display: inline-block;
+            background-color: var(--link);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: auto;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .action-btn:hover {
+            background-color: #0052a3;
+            transform: translateY(-2px);
+        }
+        .action-btn-danger {
+            background-color: #dc3545;
+        }
+        .action-btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .language-grid, .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .language-item, .skill-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--item-bg);
+            border-radius: 8px;
+        }
+
+        .flag-icon, .skill-icon {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin: 0 auto 0.5rem;
+            display: block;
+            background-color: var(--item-bg);
+        }
+
+        .proficiency {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 0.3rem;
+        }
+
+        @media (max-width: 600px) {
+            .language-grid, .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .portrait {
+                width: 100px;
+                height: 100px;
+            }
+            .flag-icon, .skill-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+        
+        .about-section {
+            padding: 2rem;
+        }
+
+        .about-columns {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .about-portrait {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .about-bio {
+            flex: 2;
+        }
+
+        .profile-image {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+
+        .bio-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .bio-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .bio-icon {
+            font-size: 1.3rem;
+            margin-top: 0.2rem;
+        }
+
+        .bio-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bio-value {
+            font-size: 1.05rem;
+            color: #333;
+            margin-top: 0.2rem;
+        }
+
+        .program-badge {
+            background: #ffffff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--link);
+            border: 1px solid #d0e3ff;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .about-columns {
+                flex-direction: column;
+            }
+            .about-portrait {
+                width: 60%;
+                margin: 0 auto;
+            }
+        }
+
+        .experience-section {
+            margin-top: 2rem;
+        }
+
+        .research-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-btn {
+            background-color: var(--item-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #d5d5d5;
+        }
+
+        .filter-btn.active {
+            background-color: var(--link);
+            color: white;
+            border-color: var(--link);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        .experience-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .exp-box {
+            background-color: var(--item-bg);
+            border-left: 5px solid var(--link);
+            padding: 1.2rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease;
+            display: block;
+        }
+        
+        .exp-box:hover {
+            transform: translateX(4px);
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        @media (max-width: 500px) {
+            .exp-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+        }
+
+        .exp-year {
+            font-weight: 700;
+            color: var(--link);
+            font-size: 1.2rem;
+        }
+
+        .exp-role {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem; 
+        }
+
+        .exp-details {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ================================== */
+        /* === MODAL (POPUP) STYLES === */
+        /* ================================== */
+        .gallery-btn {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .gallery-btn:hover {
+            background: #f0f0f0;
+            border-color: #ccc;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.7); /* Starts small */
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            position: relative;
+        }
+
+        /* This creates the expanding from center effect */
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            object-fit: cover;
+            max-height: 400px;
+        }
+
+        .modal-gallery.side-by-side {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-gallery.side-by-side img {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .modal-desc {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .modal-gallery.side-by-side {
+                flex-direction: column;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Contact Methods */
+        .contact-section {
+            margin-top: 3rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .status {
+            color: #666;
+            margin: 0.5rem 0 1.5rem;
+            font-size: 1rem;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 0.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            background: #f8f8f8;
+        }
+
+        .nav-link:hover {
+            color: #0066cc;
+            border-color: #d0e3ff;
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
+
+        @media (min-width: 600px) {
+            .header-nav {
+                gap: 2rem;
+            }
+            .nav-link {
+                padding: 0.5rem 1.2rem;
+            }
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.2rem;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s ease;
+            border: 1px solid #eee;
+        }
+
+        .contact-link:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .contact-icon {
+            font-size: 1.3rem;
+        }
+
+        .contact-text {
+            font-size: 1.05rem;
+        }
+
+        @media (max-width: 600px) {
+            .contact-link {
+                padding: 0.7rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-sticky-header" id="stickyHeader">
+        <span class="sticky-title">Ryuma Kojima</span>
+        <div class="hamburger" id="hamburgerBtn" aria-label="Open Navigation Menu" role="button" tabindex="0">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="mobile-side-menu" id="sideMenu">
+        <div class="menu-close" id="closeMenuBtn">&times;</div>
+        <nav class="side-nav">
+            <a href="#about" class="side-nav-link" data-target="about">About Me</a>
+            <a href="#maker-portfolio" class="side-nav-link" data-target="maker-portfolio">Maker's Portfolio</a>
+            <a href="#experience" class="side-nav-link" data-target="experience">My Experience</a>
+            <a href="#languages" class="side-nav-link" data-target="languages">Languages</a>
+            <a href="#skills" class="side-nav-link" data-target="skills">Skills</a>
+            <a href="#contact" class="side-nav-link" data-target="contact">Contact</a>
+        </nav>
+    </div>
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+
+    <nav class="table-of-contents">
+        <h4>Contents</h4>
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#maker-portfolio">Maker's Portfolio</a></li>
+            <li><a href="#experience">My Experience</a></li>
+            <li><a href="#languages">Languages</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="intro-overlay" id="introOverlay">
+        <img id="introGoal" class="intro-goal"
+             src="assets/IMG_9984-removebg-preview.png"
+             alt="Basketball Goal">
+        <img id="introShooter" class="intro-shooter"
+             src="assets/IMG_9982-removebg-preview.png"
+             alt="Shooter">
+        <img id="introBall" class="intro-ball"
+             src="https://pbs.twimg.com/media/GnJQLR1bcAAxfy1?format=jpg&name=360x360"
+             alt="Ball">
+    </div>
+
+    <div class="main-content hidden">
+        <header>
+            <div class="header-content">
+                <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&name=small" 
+                     alt="Ryuma Kojima" 
+                     class="portrait">
+                <h1>Ryuma Kojima</h1>
+                <p class="status">High School Student (as of Year 12, 2026)<br>Contractor, MTC && Translator / Sales, <a href="https://sardes.com.tr/en/home/" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:underline;">SARDES</a></p>
+                
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="/blog" class="nav-link">Blog!!</a> 
+                    <a href="/makerport" class="nav-link">Projects</a>
+                    <a href="/art" class="nav-link">Art Gallery</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section id="about" class="card about-section scroll-section">
+                <div class="about-columns">
+                    <div class="about-portrait">
+                        <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&name=small" 
+                             alt="Ryuma Kojima Portrait" 
+                             class="profile-image">
+                    </div>
+                    
+                    <div class="about-bio">
+                        <h2>About Me</h2>
+                        
+                        <div class="bio-grid">
+                            <div class="bio-item">
+                                <span class="bio-icon">👤</span>
+                                <div>
+                                    <div class="bio-label">Name</div>
+                                    <div class="bio-value">Ryuma Kojima</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bio-item">
+                                <span class="bio-icon">🎓</span>
+                                <div>
+                                    <div class="bio-label">Status</div>
+                                    <div class="bio-value">High School Student (Year 12, 2026)<br>Contractor, <a href="https://www.milestonetc.asia/" style="color:var(--link); text-decoration:none;">MTC</a> && Translator / Sales, <a href="https://sardes.com.tr/en/home/" target="_blank" rel="noopener noreferrer" style="color:var(--link); text-decoration:none;">SARDES</a></div>
+                                </div>
+                            </div>
+                            
+                            <div class="bio-item">
+                                <span class="bio-icon">❤️</span>
+                                <div>
+                                    <div class="bio-label">Interests</div>
+                                    <div class="bio-value">Linguistics (shout out to Sir William Jones), CS, Robotics, Football</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="maker-portfolio" class="card scroll-section">
+                <h2>Maker's Portfolio</h2>
+                <p style="color: var(--light-text); margin-bottom: 1rem;">A collection of things I've built and experimented with.</p>
+                
+                <div class="maker-grid">
+                    <div class="maker-card">
+                        <img src="/random%20pgoto/IMG_8868.jpeg" alt="Boris the 1st">
+                        <h3>Boris the 1st</h3>
+                        <div><span class="status-badge st-finished">FINISHED</span></div>
+                        <p>An autonomous robot companion using YOLO object detection, Aruduino, and rasp-5 to identify and chase humans.</p>
+                        <iframe 
+                            width="100%" 
+                            height="130" 
+                            src="https://www.youtube.com/embed/ubqD3Tz85OA" 
+                            title="Boris the 1st Video" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            style="margin-top:10px; border-radius: 6px; border: 1px solid var(--border);">
+                        </iframe>
+                    </div>
+
+                    <div class="maker-card">
+                        <img src="assets/IMG_8891.jpg" alt="TeleMacc">
+                        <h3>TeleMacc (AI Delivery)</h3>
+                        <div><span class="status-badge st-ongoing">ONGOING...</span></div>
+                        <p>Solving the "last mile" logistics crisis in rural Japan.</p>
+                        <p>I am building an affordable, open-source AI delivery robot kit so that small local carriers can build their own autonomous infrastructure.</p>
+                        <a href="https://ramenismymen.github.io/ryuma/telemacc" target="_blank" class="action-btn action-btn-danger">TeleMacc Project Website</a>
+                    </div>
+
+                    <div class="maker-card">
+                        <img src="/random%20pgoto/unnamed.jpg" alt="Soccer Analysis">
+                        <h3>Soccer Analysis</h3>
+                        <div><span class="status-badge st-finished">FINISHED</span></div>
+                        <p>Calculating knee angle during juggling using YOLO.</p>
+                        <p>But tbh I've never got in situation where I need to calculate my knee angle precisely while juggling.</p>
+                    </div>
+
+                    <div class="maker-card">
+                        <img src="/random%20pgoto/IMG_8871.jpeg" alt="Rongo Programming">
+                        <h3>Rongo Programming</h3>
+                        <div><span class="status-badge st-ongoing">ONGOING</span></div>
+                        <p>Have you ever wondered why there is 論理 (Logic) programming but not 論語 (Rongo) programming?</p>
+                        <p>Yes indeed, it is actually unfair, so I am making it. Shout-out to our fam 孔子 (Confucius).</p>
+                    </div>
+
+                    <div class="maker-card">
+                        <img src="assets/IMG_7109.jpeg" alt="Boris the 2nd">
+                        <h3>Boris the 2nd</h3>
+                        <div><span class="status-badge st-finished">FINISHED</span></div>
+                        <p>Successor of Boris the 1st. Changed its body to white board to make the robot lighter.</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/makerport" class="action-btn">See Detailed Portfolio</a>
+                </div>
+            </section>
+            
+          <section id="experience" class="card experience-section scroll-section">
+    <h2>My Experience</h2>
+    
+    <div class="experience-content">
+        <p class="research-statement">
+            Use the filters below to sort by sector.
+        </p>
+
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All Experiences</button>
+            <button class="filter-btn" data-filter="tech">Software & IT</button>
+            <button class="filter-btn" data-filter="global">Global & Business</button>
+            <button class="filter-btn" data-filter="education">Education & Outreach</button>
+            <button class="filter-btn" data-filter="research">Research</button>
+        </div>
+        
+        <div class="experience-timeline">
+            
+            <div class="exp-box" data-category="tech">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>Contractor, MTC</span>
+                        <span class="program-badge">Software Dev</span>
+                        <span class="program-badge">Web & SEO</span>
+                    </span>
+                    <span class="exp-year">2026</span>
+                </div>
+                <p class="exp-details">Built Windows software using Crestron APIs to help the company organize and track their storage supplies. Updated the company website and improved its SEO to get more online traffic.</p>
+            </div>
+
+            <div class="exp-box" data-category="global">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>Translator / Sales, <a href="https://sardes.com.tr/en/home/" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:underline;">SARDES</a></span>
+                        <span class="program-badge">Global Business</span>
+                        <span class="program-badge">Translation</span>
+                    </span>
+                    <span class="exp-year">2026</span>
+                </div>
+                <p class="exp-details">Supported operations for the Turkey Pavilion at <a href="https://foodex.jma.or.jp/en/" target="_blank" rel="noopener noreferrer" style="color: var(--link); font-weight: 600;">FOODEX Japan 2026</a> (Tokyo Big Sight).</p>
+                
+                <button class="gallery-btn">📷 View Photos</button>
+                <div class="hidden-gallery-data hidden">
+                    <div class="modal-gallery">
+                        <img src="https://media.licdn.com/dms/image/v2/D5622AQHfxTShCLiY_g/feedshare-shrink_800/B56ZzsglJTJgAg-/0/1773494490075?e=1776902400&v=beta&t=TeLri3f6bFLpr7gQuypJWXU0XOwSh74n5Qaf7NIwD4w" alt="Sardes intern translation">
+                    </div>
+                    <div class="modal-desc">
+                        <p>Supported operations for the Turkey Pavilion at FOODEX Japan 2026 (Tokyo Big Sight).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exp-box" data-category="education">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>Tutor (English / Study Abroad), Jprep</span>
+                        <span class="program-badge">Education</span>
+                        <span class="program-badge">Mentorship</span>
+                    </span>
+                    <span class="exp-year">2026</span>
+                </div>
+                <p class="exp-details">Tutoring students preparing for university.</p>
+            </div>
+
+            <div class="exp-box" data-category="tech education">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>STEM Outreach Event, Science Agora</span>
+                        <span class="program-badge">STEM Education</span>
+                        <span class="program-badge">Programming</span>
+                    </span>
+                    <span class="exp-year">2025</span>
+                </div>
+                <p class="exp-details">Taught C++/Scratch to 50~200 kids.</p>
+
+                <button class="gallery-btn">📷 View Photos</button>
+                <div class="hidden-gallery-data hidden">
+                    <div class="modal-gallery">
+                        <img src="/blog/Screenshot%202025-11-09%20194748.png" alt="Science Agora Event">
+                    </div>
+                    <div class="modal-desc">
+                        <p>Taught C++/Scratch to 50~200 kids at the national science forum.</p>
+                        <a href="/blog/gmtcscienceagora" target="_blank" class="action-btn" style="margin-top: 1rem;">Read the Blog Post</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exp-box" data-category="research">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>Language Acquisition Research</span>
+                        <span class="program-badge">Research</span>
+                        <span class="program-badge">Linguistics</span>
+                    </span>
+                    <span class="exp-year">2024</span>
+                </div>
+                <p class="exp-details">Researched language acquisition and pitch frequency. Contact for details.</p>
+            </div>
+
+            <div class="exp-box" data-category="global education">
+                <div class="exp-header">
+                    <span class="exp-role">
+                        <span>New-Shi TV Program, NHK</span>
+                        <span class="program-badge">Media</span>
+                        <span class="program-badge">Study Abroad</span>
+                    </span>
+                    <span class="exp-year">2023</span>
+                </div>
+                
+                <p class="exp-details">Quiz program about studying abroad. <a href="https://www.nhk.jp/p/newshi/ts/3MWXJL2V4J/episode/te/M6P5JXQPRZ/" target="_blank" rel="noopener noreferrer" style="color: var(--link); font-weight: 600;">Watch Episode</a></p>
+                <button class="gallery-btn">📷 View Photos</button>
+                
+                <div class="hidden-gallery-data hidden">
+                    <div class="modal-gallery">
+                        <img src="https://imgu.web.nhk/static/assets/images/tvepisode/te/M6P5JXQPRZ/M6P5JXQPRZ-eyecatch_db7afdf8cd20577d62fc911119f3512e.png" alt="NHK NEWSHI">
+                    </div>
+                    <div class="modal-desc">
+                        <p>Quiz programme about Japanese Students studying Abroad on Japanese National TV.</p>
+                    </div>
+                </div>
+              </div>
+                
+                        <div class="exp-box" data-category="research">
+                            <div class="exp-header">
+                                <span class="exp-role">
+                                    <span>Tobitate! Study Abroad JAPAN to Tanzania</span>
+                                    <span class="program-badge">Research</span>
+                                </span>
+                                <span class="exp-year">2023</span>
+                            </div>
+                            <p class="exp-details">Microfinance volunteering & language research project.</p>
+                              <button class="gallery-btn">📷 View Photos</button>
+                
+                <div class="hidden-gallery-data hidden">
+                    <div class="modal-gallery">
+                        <img src="/S__1966182_0.jpg" alt="NHK NEWSHI">
+                    </div>
+                    <div class="modal-desc">
+                        <p>Me teaching Japanese at local community college</p>
+                    </div>
+                </div>
+                        </div>
+
+                        <div class="exp-box" data-category="education robotics business">
+                            <div class="exp-header">
+                                <span class="exp-role">
+                                    <span>The Knowledge Society (TKS)</span>
+                                    <span class="program-badge">Education</span>
+                                    <span class="program-badge">Robotics & STEM</span>
+                                    <span class="program-badge">Business & Marketing</span>
+                                </span>
+                                <span class="exp-year">2022</span>
+                            </div>
+                            <p class="exp-details">Innovation and tech training program.</p>
+                        </div>
+
+            </div>
+
+        </div>
+    
+</section>
+    
+            <section id="languages" class="card scroll-section">
+                <h2>Languages</h2>
+                <div class="language-grid">
+                    <div class="language-item">
+                        <img src="https://pbs.twimg.com/media/GnJPRIWbgAQPtLA?format=jpg&name=240x240" alt="Japan" class="flag-icon">
+                        <p>Japanese<br><span class="proficiency">Native</span></p>
+                    </div>
+                    <div class="language-item">
+                        <img src="https://pbs.twimg.com/media/GnJRG2ObgAIlkt4?format=jpg&name=240x240" alt="Australia" class="flag-icon">
+                        <p>English<br><span class="proficiency">C1</span></p>
+                    </div>
+                    <div class="language-item">
+                        <img src="https://pbs.twimg.com/media/GnJRGy2bgAE1VhA?format=jpg&name=small" alt="Germany" class="flag-icon">
+                        <p>German<br><span class="proficiency">Learning</span></p>
+                    </div>
+                </div>
+            </section>
+    
+            <section id="skills" class="card scroll-section">
+                <h2>Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <img src="/Screenshot%202025-08-17%20164228.png" alt="C++" class="skill-icon">
+                        <p>C++ Programming</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="/S__3997702_0.jpg" alt="ling" class="skill-icon">
+                        <p>Linguistic Research</p>
+                    </div>
+                    <div class="skill-item">
+                    <img src="/S__3997704_0.jpg" alt="Arduino" class="skill-icon">
+                        <p>Arduino</p>
+                    </div>
+                    <div class="skill-item">
+                    <img src="/IMG_6391.jpeg" alt="Python" class="skill-icon">
+                        <p>Python</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="contact" class="card contact-section scroll-section">
+                <h2>Contact</h2>
+                <div class="contact-methods">
+                    <a href="https://www.linkedin.com/in/ryuma-kojima-90250a298/" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <span class="contact-icon">📎</span>
+                        <span class="contact-text">LinkedIn</span>
+                    </a>
+                    <a href="https://www.instagram.com/rrryyma?igsh=YnRvYTg3azlmYmNu&utm_source=qr" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <span class="contact-icon">📷</span>
+                        <span class="contact-text">Instagram</span>
+                    </a>
+                    <a href="https://x.com/yutatff" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <span class="contact-icon">X</span>
+                        <span class="contact-text">X( twitter )</span>
+                    </a>
+                    <a href="mailto:ryumakoj@gmail.com" class="contact-link">
+                        <span class="contact-icon">✉️</span>
+                        <span class="contact-text">ryumakoj@gmail.com</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="photoModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModalBtn">&times;</span>
+            <div id="modalBody">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // === Intro Basketball Animation ===
+            const overlay = document.getElementById('introOverlay');
+            const mainContent = document.querySelector('.main-content');
+            document.body.style.overflow = 'hidden';
+
+            function launchBall() {
+                const goalEl    = document.getElementById('introGoal');
+                const shooterEl = document.getElementById('introShooter');
+                const ball      = document.getElementById('introBall');
+
+                const goalRect    = goalEl.getBoundingClientRect();
+                const shooterRect = shooterEl.getBoundingClientRect();
+
+                // Ball size: ~8vmin
+                const ballSize = Math.min(window.innerWidth, window.innerHeight) * 0.078;
+                ball.style.width  = ballSize + 'px';
+                ball.style.height = ballSize + 'px';
+
+                // Start: shooter's raised arm tip.
+                // Image is scaleX(-1), so original right arm tip maps to the
+                // visual LEFT edge of the element (~18% from left, ~12% from top).
+                const startX = shooterRect.left + shooterRect.width  * 0.18;
+                const startY = shooterRect.top  + shooterRect.height * 0.12;
+
+                // End: goal's rim — top-center of the goal image (~50% x, ~30% y)
+                const endX = goalRect.left + goalRect.width  * 0.50;
+                const endY = goalRect.top  + goalRect.height * 0.30;
+
+                // Position ball at start
+                ball.style.left    = (startX - ballSize / 2) + 'px';
+                ball.style.top     = (startY - ballSize / 2) + 'px';
+                ball.style.display = 'block';
+
+                // Quadratic bezier control point: arc upward before dropping into hoop
+                const cpX = startX + (endX - startX) * 0.35;
+                const cpY = Math.min(startY, endY) - window.innerHeight * 0.28;
+
+                // Build 30-step parabolic keyframes using transform: translate
+                const steps = 30;
+                const keyframes = [];
+                for (let i = 0; i <= steps; i++) {
+                    const t  = i / steps;
+                    const bx = (1-t)*(1-t)*startX + 2*t*(1-t)*cpX + t*t*endX;
+                    const by = (1-t)*(1-t)*startY + 2*t*(1-t)*cpY + t*t*endY;
+                    keyframes.push({
+                        transform: `translate(${bx - startX}px, ${by - startY}px)`,
+                        offset: t
+                    });
+                }
+
+                const ballAnim = ball.animate(keyframes, {
+                    duration: 1300,
+                    easing: 'linear',
+                    fill: 'forwards'
+                });
+
+                ballAnim.onfinish = () => {
+                    overlay.animate(
+                        [{ opacity: 1 }, { opacity: 0 }],
+                        { duration: 600, fill: 'forwards' }
+                    ).onfinish = () => {
+                        overlay.style.display = 'none';
+                        mainContent.classList.remove('hidden');
+                        document.body.style.overflow = 'auto';
+                    };
+                };
+            }
+
+            // Wait for both scene images to load before animating
+            const sceneImgs = [
+                document.getElementById('introGoal'),
+                document.getElementById('introShooter')
+            ];
+            let loadedCount = 0;
+            function onImgLoad() {
+                loadedCount++;
+                if (loadedCount >= sceneImgs.length) launchBall();
+            }
+            sceneImgs.forEach(img => {
+                if (img.complete && img.naturalWidth > 0) onImgLoad();
+                else img.addEventListener('load', onImgLoad);
+            });
+
+            // === Experience Filter Logic ===
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const expBoxes = document.querySelectorAll('.exp-box');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    expBoxes.forEach(box => {
+                        if (filterValue === 'all') {
+                            box.style.display = 'block';
+                        } else {
+                            if (box.getAttribute('data-category').includes(filterValue)) {
+                                box.style.display = 'block';
+                            } else {
+                                box.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+
+            // === Mobile Menu & Scroll Spy Logic ===
+            const stickyHeader = document.getElementById('stickyHeader');
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            const sections = document.querySelectorAll('.scroll-section');
+            const navLinks = document.querySelectorAll('.side-nav-link');
+
+            // Toggle side menu
+            function toggleMenu() {
+                sideMenu.classList.toggle('open');
+                menuBackdrop.classList.toggle('visible');
+            }
+
+            hamburgerBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            menuBackdrop.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+
+            // Handle Scroll Events
+            window.addEventListener('scroll', () => {
+                // Show sticky header after scrolling past 200px
+                if (window.scrollY > 200) {
+                    stickyHeader.classList.add('visible');
+                } else {
+                    stickyHeader.classList.remove('visible');
+                }
+
+                // Scroll Spy logic for active menu item
+                let currentSectionId = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= (sectionTop - 150)) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav-item');
+                    if (link.getAttribute('data-target') === currentSectionId) {
+                        link.classList.add('active-nav-item');
+                    }
+                });
+            });
+
+            // === Modal (Popup) Logic ===
+            const modal = document.getElementById('photoModal');
+            const modalBody = document.getElementById('modalBody');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const galleryBtns = document.querySelectorAll('.gallery-btn');
+
+            // Open modal when clicking the button
+            galleryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const hiddenData = btn.nextElementSibling.innerHTML;
+                    modalBody.innerHTML = hiddenData;
+                    modal.classList.add('active');
+                });
+            });
+
+            // Close modal when clicking the 'X'
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            // Close modal when clicking outside the box
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

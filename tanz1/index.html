@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>アジア人 タンザニアへ</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* --- MODIFIED: 基本スタイルの調整 --- */
+  body {
+    background-color: #f0f0f0;
+    /* MODIFIED: クロスプラットフォームで読みやすいフォントに変更 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #333;
+    margin: 0;
+  }
+  
+  /* ================================= */
+  /* === ヘッダー用のCSS (変更なし) === */
+  /* ================================= */
+
+  header {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 20px;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .portrait {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+  }
+
+  .status {
+    color: #666;
+    margin: 0.5rem 0 1.5rem;
+    font-size: 1rem;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 0.5rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+    background: #f8f8f8;
+  }
+
+  .nav-link:hover {
+    color: #0066cc;
+    border-color: #d0e3ff;
+    background: #f0f7ff;
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 600px) {
+    .header-nav {
+        gap: 2rem;
+    }
+    .nav-link {
+        padding: 0.5rem 1.2rem;
+    }
+  }
+
+  /* =============================== */
+  /* === ここまでヘッダー用のCSS === */
+  /* =============================== */
+  
+  /* New Layout Styles */
+  .page-wrapper {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+  }
+
+  .sidebar .toc-box {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 15px;
+  }
+  
+  .sidebar h3 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.9em;
+  }
+
+  .sidebar ul ul {
+    padding-left: 20px;
+  }
+
+  .sidebar li {
+    margin-bottom: 8px;
+  }
+
+  .main-content {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  /* Original Container Style */
+  .container {
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+
+  /* Typography and Element Styles */
+  h1 {
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Chapter Style (章) */
+  .chapter {
+    font-size: 1.8em;
+    color: #444;
+    text-align: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 15px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+
+  /* Section Style (節) */
+  .section {
+    font-size: 1.4em;
+    color: #444;
+    border-left: 5px solid #008080;
+    padding-left: 15px;
+    margin-top: 40px;
+  }
+
+  p {
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  .meta-info {
+    text-align: right;
+    color: #666;
+    font-size: 0.9em;
+  }
+
+  a {
+    color: #008080;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* New Image and Caption Styles */
+  figure {
+    margin: 30px auto;
+    width: 70%;
+  }
+
+  figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #ddd;
+  }
+
+  figcaption {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 8px;
+  }
+  
+  .top-toc {
+      border: 1px solid #eee;
+      background-color: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 40px;
+  }
+  
+  /* ================================================== */
+  /* === ADDED FOR MOBILE: スマートフォン用のスタイル === */
+  /* ================================================== */
+  @media (max-width: 768px) {
+    .page-wrapper {
+        /* 横並びから縦積みに変更 */
+        flex-direction: column;
+        padding: 0 15px;
+    }
+    
+    .sidebar {
+        /* サイドバーを通常の要素に戻す */
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    .main-content {
+        width: 100%;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    /* 本文中の目次はスマホでは非表示にする（サイドバーの目次が上に来るため） */
+    .top-toc {
+        display: none;
+    }
+    
+    /* 見出しの文字サイズを少し小さくする */
+    .chapter {
+        font-size: 1.5em;
+    }
+    
+    .section {
+        font-size: 1.2em;
+    }
+    
+    /* 画像の幅を広げて見やすくする */
+    figure {
+        width: 100%;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+  <header>
+            <div class="header-content">
+                <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&amp;name=small" 
+                     alt="Ryuma Kojima" 
+                     class="portrait">
+                <h1>Ryuma Kojima</h1>
+                <p class="status">Highschool Year 12 Student (as of 2025)</p>
+                
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="/blog" class="nav-link">Blog!!</a> 
+                    <a href="/project" class="nav-link">Projects</a>
+                    <a href="/art" class="nav-link">Art Gallery</a>
+                    <a href="https://gmtcjapan.com/" class="nav-link">GMTC STEM teaching initiative </a>
+                </nav>
+            </div>
+        </header>
+
+
+<div class="page-wrapper">
+  
+  <aside class="sidebar">
+    <div class="toc-box">
+      <h3>目次</h3>
+      <ul>
+        <li><a href="#c1">幸先と機内食悪し</a>
+          <ul>
+            <li><a href="#s1-1">読めない安全アナウンス</a></li>
+            <li><a href="#s1-2">RyanAir並みのサービス</a></li>
+            <li><a href="#s1-3">多文化理解 feat.機内食</a></li>
+            <li><a href="#s1-4">ノイズキャンセリング</a></li>
+          </ul>
+        </li>
+        <li><a href="#c2">幻の韓国上陸</a></li>
+        <li><a href="#c3">ドバイアルティメットトランジット</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="container">
+      <h1>タンザニアへ</h1>
+      <p class="meta-info">Ryuma Kojima<br>2025年8月17日</p>
+      <hr>
+
+      <div class="top-toc">
+        <h3>目次</h3>
+        <ul>
+          <li><a href="#c1">幸先と機内食悪し</a>
+            <ul>
+                <li><a href="#s1-1">読めない安全アナウンス</a></li>
+                <li><a href="#s1-2">RyanAir並みの機内設備とサービス</a></li>
+                <li><a href="#s1-3">多文化理解 feat.機内食</a></li>
+                <li><a href="#s1-4">ノイズキャンセリング</a></li>
+            </ul>
+          </li>
+          <li><a href="#c2">幻の韓国上陸</a></li>
+          <li><a href="#c3">ドバイアルティメットトランジット</a></li>
+        </ul>
+      </div>
+
+     
+      <h2 class="chapter" id="c1">-幸先と機内食悪し-</h2>
+
+      <h3 class="section" id="s1-1">読めない安全アナウンス</h3>
+      <p>
+        機内アナウンスの楔形文字。ハンムラビ法典に似た匂いがする. エチオピア航空なだけあってエチオピア語の機内案内が流れるが、さっぱり分からない。小学生の頃の漢字ドリルに載っていた漢字の成り立ちのイラストを思い出す。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752995381-51RU3Fypg9OarJ8b4nKsX6tk.png?width=2000&height=2000&fit=bounds&quality=85" alt="機内アナウンスの楔形文字" loading="lazy">
+      </figure>
+
+      <h3 class="section" id="s1-2">RyanAir並みの機内設備とサービス</h3>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752995733-rXjmeifGCbBoRNFS6UQlZygh.png?width=2000&height=2000&fit=bounds&quality=85" alt="Ryan Air並みのいやがらせ" loading="lazy">
+        <figcaption>Ryan Air並みのいやがらせ</figcaption>
+      </figure>
+      <p>
+        暗くてわかりづらいと思うが、なぜか私の席だけ窓がない。前の座席の窓から眺めなければならなくなった。怪訝な顔をされるのも無理はない。後ろの東洋人が首を伸ばして自分の窓を覗いているのだ。怪しさが半端ない。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752995782-9Lwum43Za6YTXbEKIfcSzBvH.png?width=2000&height=2000&fit=bounds&quality=85" alt="天は我を捨てたもうたか" loading="lazy">
+        <figcaption>天は我を捨てたもうたか</figcaption>
+      </figure>
+      <p>
+        加えて座席の充電ポートが壊れている。なぜこんな不幸なことばかり起きるのだろうか。
+      </p>
+
+      <h3 class="section" id="s1-3">多文化理解 feat.機内食</h3>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752996639-ped1QgiNcGVburIWUxh9Cto3.png?width=2000&height=2000&fit=bounds&quality=85" alt="すいかのようななにか" loading="lazy">
+        <figcaption>すいかのようななにか</figcaption>
+      </figure>
+      <p>
+        信じられないほど口に合わない。まずいなどのではなく、おそらく文化レベルで味が合わない。 助けを求めサラダに逃げたがこれもまた合わない。 前の座席の窓を覗いていたところ、前の席のインド人と仲良くなった。どうやら食べられないのに鶏肉をもらってしまったらしい。（なぜ？）鶏肉の方は美味しく、ありがたく頂いた。
+      </p>
+
+      <h2 class="chapter" id="c2">-幻の韓国上陸-</h2>
+      <p>
+        いろいろありながらも仁川空港に到着した。しかし楽しんでいる時間はない。そもそもこんな真夜中にやっているお店などなく、韓国キムチを楽しむことすら許されなかった。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752997725-n3dk9fpBqvTSaILu4jXwKF1s.jpg?width=2000&height=2000&fit=bounds&quality=85" alt="愛の不時着？" loading="lazy">
+        <figcaption>愛の不時着？</figcaption>
+      </figure>
+      <p>
+        フラフラ外を出歩くこともできないのでこのままみじめな気分で仁川の夜景を眺めるしかなからしい。ターミナルの主人公になった気分。<br>
+      </p>
+      <p>
+        <br>
+        <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB_(%E6%98%A0%E7%94%BB)" target="_blank" rel="noopener noreferrer">ターミナル (映画) - Wikipedia</a>
+      </p>
+
+      <h2 class="chapter" id="c3">ドバイアルティメットトランジット</h2>
+      <p>
+        次なるアメリカンドリームを目指してはるばるドバイへと降り立った。やはり暑いが、乾燥しているためか長袖を着ると涼しく感じる。お出迎えは左から読むでおなじみアラビア語。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752999188-9zFEs0doRWAjTfvbgu6cPeOY.jpg?width=2000&height=2000&fit=bounds&quality=85" alt="メインとエントランスを意味するアラビア語" loading="lazy">
+        <figcaption>メインとエントランスを意味する二語でここまで短いのは言語として効率がいい？</figcaption>
+      </figure>
+      <p>
+        仁川の時とは違い、トランジットではあるがせっかくなので一週間遊びつくすことにした。石油でお金が余っているのか、無料のSIMカードをもらった。 タクシーでホテルへと向かうが、街がまるで近未来ゲームのようだった。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752999753-JCpv2HaNzdgqfeT4MEKcRLnl.jpg?width=2000&height=2000&fit=bounds&quality=85" alt="さすがはドバイ" loading="lazy">
+        <figcaption><br>さすがはドバイ</figcaption>
+      </figure>
+      <p>
+        その夜、すこし背伸びをしてブルジュハリファのVIPコースを予約（後にカードの不正利用にあった）VIPという仰々しい名前とは裏腹にそこまで値段は変わらなかったが、サービスは大違いだった。デーツを頂き、紅茶も飲んだところでガイド付きで頂上へ。この時間はVIP専用なのか人が少ない。某スカイツリーもインバウンド向けに始めたらどうだろうか？ いざ展望台へと向かうも、なんと屋外。それも柵に大きめの隙間が空いている。
+      </p>
+      <p>
+        大きめの隙間から手を出す観光客もいたが、私にそんな勇気はなかった。
+      </p>
+      <figure>
+        <img src="https://assets.st-note.com/img/1752999824-NZj8E16qIY4xMdUr7PXzQF5m.png?width=2000&height=2000&fit=bounds&quality=85" alt="ブルジュハリファの展望台の隙間" loading="lazy">
+            <figcaption>こぶし1.5個分の大きめの隙間がある。大丈夫かブルジュハリファ<br></figcaption>
+      </figure>
+
+      <hr>
+      <p style="text-align: center;">
+        <a href="/">ホームページに戻る/Back to my website</a>
+      </p>
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

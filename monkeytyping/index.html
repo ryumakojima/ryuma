@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkey Volume Control</title>
+    
+    <style>
+        body {
+          
+            text-align: center; 
+            margin-top: 2rem;
+        }
+        #monkeyImage {
+            width: 400px;
+            height: 300px;
+            object-fit: cover; 
+            border: 1px solid #000;
+        }
+        #volumeResult {
+            font-size: 2.5rem; 
+            color: black;      
+            font-weight: bold;
+            min-height: 3rem; 
+            margin: 1rem 0;
+        }
+
+    </style>
+</head>
+<header>
+    <div class="header-content">
+       
+
+       
+        <h1>Ryuma Kojima</h1>
+      
+        
+        <nav class="header-nav">
+            <a href="index.html" class="nav-link">Home | </a>
+          <a href="/blog" class="nav-link"> Blog!! | </a>         
+                  <a href="/project" class="nav-link"> Projects</a>
+ 
+        </nav>
+    </div>
+</header>
+<body>
+
+    <div class="container">
+        <h1>Infinite monkey volume controller</h1>
+        <p>Let him cook</p>
+        
+        <img id="monkeyImage" src="/blog/S__5431315_0.jpg" alt="Monkey at a typewriter">
+        
+        <div id="volumeResult">click below</div>
+        
+        <button id="setVolumeButton">Set Volume</button>
+    </div>
+
+    <audio 
+      id="audioPlayer" 
+      src="../assets/Men%20of%20Harlech%20-%20Welsh%20Patriotic%20Song.mp3"
+      preload="auto">
+    </audio>
+
+    <script>
+   
+        const volumeButton = document.getElementById('setVolumeButton');
+        const monkeyImage = document.getElementById('monkeyImage');
+        const volumeResult = document.getElementById('volumeResult');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        const typingMonkeyUrl = '/blog/S__5431315_0.jpg';
+        const finishedMonkeyUrl = '/blog/S__5431317_0.jpg';
+
+
+        volumeButton.addEventListener('click', () => {
+            
+   
+            monkeyImage.src = typingMonkeyUrl;
+            volumeResult.textContent = 'Typing'; 
+            volumeButton.disabled = true;
+
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0; 
+            
+
+            setTimeout(() => {
+               
+                const randomVolume = Math.floor(Math.random() * 100) + 1;
+                
+             
+                monkeyImage.src = finishedMonkeyUrl;
+                volumeResult.textContent = randomVolume;
+                volumeButton.disabled = false; 
+
+             
+                audioPlayer.volume = randomVolume / 100;
+                
+            
+                audioPlayer.play();
+
+            }, 2000); 
+        });
+    </script>
+
+</body>
+</html>

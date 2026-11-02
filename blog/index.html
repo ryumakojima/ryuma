@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Jobless Asian's Blog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* --- ADDED: Dark Mode Variables --- */
+  :root {
+    --bg-color: #f0f0f0;
+    --card-bg-color: #fff;
+    --text-color: #333;
+    --header-text-color: #444;
+    --border-color: #ccc;
+    --tag-bg-color: #e0e0e0;
+    --tag-text-color: #555;
+    --nav-link-bg: #f8f8f8;
+    --nav-link-border: #eee;
+  }
+
+  body.dark-mode {
+    --bg-color: #121212;
+    --card-bg-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --header-text-color: #f1f1f1;
+    --border-color: #444;
+    --tag-bg-color: #333;
+    --tag-text-color: #bbb;
+    --nav-link-bg: #2c2c2c;
+    --nav-link-border: #444;
+  }
+
+  /* --- Main Theme --- */
+  body {
+    background-color: var(--bg-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: var(--text-color);
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  h1, h2 {
+    color: var(--header-text-color);
+    text-align: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+  }
+  a {
+    color: #008080; /* Teal color for links */
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* --- New Header Styles --- */
+  header {
+    background-color: var(--card-bg-color);
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+ .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    position: relative; /* For positioning the theme toggle */
+}
+  .portrait {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--border-color);
+    object-fit: cover;
+  }
+  header h1 {
+    margin: 10px 0 5px 0;
+    border-bottom: none;
+    font-size: 2em;
+  }
+  .status {
+    color: #888; /* Slightly adjusted for better contrast in both modes */
+    margin-top: 0;
+  }
+  .header-nav {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 0.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--header-text-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--nav-link-border);
+    background: var(--nav-link-bg);
+}
+
+.nav-link:hover {
+    color: #0066cc;
+    border-color: #d0e3ff;
+    background: #f0f7ff;
+    transform: translateY(-2px);
+}
+
+body.dark-mode .nav-link:hover {
+    color: #8ab4f8;
+    border-color: #3c4043;
+    background: #3c4043;
+}
+
+  /* --- ADDED: Theme Toggle Button --- */
+  .theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: var(--nav-link-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: all 0.3s ease;
+  }
+  .theme-toggle:hover {
+      transform: scale(1.1);
+  }
+
+@media (min-width: 600px) {
+    .header-nav {
+        gap: 2rem;
+    }
+    .nav-link {
+        padding: 0.5rem 1.2rem;
+    }
+}
+  /* --- Filtering and Controls --- */
+  .filter-controls {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  .filter-group {
+    display: flex; 
+    align-items: center;
+    gap: 5px;
+  }
+  .filter-group label {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  select, button {
+    font-family: inherit;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  button {
+    background-color: #008080;
+    color: white;
+    border: 1px solid #005a5a;
+  }
+  button:hover {
+    background-color: #005a5a;
+  }
+
+  /* --- Blog Post Grid --- */
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* --- Blog Post Box --- */
+  .post-box {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.3s, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  body.dark-mode .post-box:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .post-box-image-link {
+    display: block;
+    width: 100%;
+    height: 180px;
+    background-color: #eee;
+  }
+  .post-box-image-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .post-box-content {
+    padding: 15px;
+    border-top: 1px solid var(--nav-link-border);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-box-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+  .post-box-title a {
+    color: var(--text-color);
+  }
+  .post-box-tags {
+    margin-top: auto;
+  }
+  .tag {
+    display: inline-block;
+    background-color: var(--tag-bg-color);
+    color: var(--tag-text-color);
+    padding: 3px 8px;
+    font-size: 0.8em;
+    border-radius: 3px;
+    margin-right: 5px;
+    margin-top: 5px;
+  }
+  .hidden {
+      display: none;
+  }
+
+  /* --- Media Query for screens smaller than 600px --- */
+  @media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    .portrait {
+        width: 100px;
+        height: 100px;
+    }
+
+    header h1 {
+        font-size: 1.6em;
+    }
+    
+    .status {
+        font-size: 0.9em;
+    }
+
+    .header-nav {
+        gap: 0.5rem;
+    }
+
+    .nav-link {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9em;
+    }
+    
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 6px;
+        font-size: 1rem;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+    }
+
+    select {
+        width: 60%;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+
+        <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&amp;name=small" 
+     alt="Ryuma Kojima" 
+     class="portrait">
+        <h1>Ryuma Kojima</h1>
+        <p class="status">Highschool Year 12 Student (as of 2025)</p>
+        
+        <nav class="header-nav">
+            <a href="index.html" class="nav-link">Home</a>
+          <a href="/blog" class="nav-link">Blog!!</a>         
+                  <a href="/makerport" class="nav-link">Projects</a>
+            <a href="/art" class="nav-link">Art Gallery</a>
+      
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+  <h1>My Blog</h1>
+
+  <div class="filter-controls">
+    <div class="filter-group">
+      <label for="filter-year">Year:</label>
+      <select id="filter-year">
+        <option value="all">All</option>
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-region">Region:</label>
+      <select id="filter-region">
+        <option value="all">All</option>
+        <option value="africa">Africa</option>
+        <option value="asia">Asia</option>
+        <option value="japan">Japan</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-type">Type:</label>
+      <select id="filter-type">
+        <option value="all">All</option>
+        <option value="travel">旅 (Travel)</option>
+        <option value="projects">プロジェクト (Projects)</option>
+        <option value="learning">学習 (Learning)</option>
+           <option value="Coding">プログラム (Coding)</option>
+        <option value="other">その他 (Other)</option>
+      </select>
+    </div>
+    <button id="random-btn">Show Random Post</button>
+  </div>
+
+  <div class="post-grid" id="post-grid">
+    <div class="post-box" data-tags="2025 africa travel">
+      <a href="/tanz1" class="post-box-image-link">
+        <img src="https://assets.st-note.com/img/1752999753-JCpv2HaNzdgqfeT4MEKcRLnl.jpg?width=2000&height=2000&fit=bounds&quality=85" alt="View from Burj Khalifa" loading="lazy">
+      </a>
+      <div class="post-box-content">
+        <h3 class="post-box-title">
+          <a href="/tanz1">ドバイの安全性</a>
+        </h3>
+        <div class="post-box-tags">
+          <span class="tag">2025</span>
+          <span class="tag">Africa</span>
+          <span class="tag">旅</span>
+        </div>
+      </div>
+    </div>
+<!-- <div class="post-grid" id="post-grid">
+    <div class="post-box" data-tags="2025 Coding Learning">
+      <a href="/blog/code" class="post-box-image-link">
+        <img src="/random%20pgoto/Screenshot%202025-11-09%20191100.png" alt="View from Burj Khalifa" loading="lazy">
+      </a>
+      
+      <div class="post-box-content">
+        <h3 class="post-box-title">
+          <a href="/blog/code">Shower sort- tall poppy sorting</a>
+        </h3>
+        <div class="post-box-tags">
+          <span class="tag">2025</span>
+          <span class="tag">Coding</span>
+          <span class="tag">Learning</span>
+        </div>
+      </div>
+    </div>
+    </div> -->
+        <div class="post-box" data-tags="2025 Japan Project learning Coding">
+      <a href="/blog/gmtcscienceagora" class="post-box-image-link">
+        <img src="/blog/Screenshot%202025-11-09%20194748.png" alt="View from Burj Khalifa" loading="lazy">
+      </a>
+      <div class="post-box-content">
+        <h3 class="post-box-title">
+          <a href="/blog/gmtcscienceagora">Stem Workshop at Science Agora</a>
+        </h3>
+        <div class="post-box-tags">
+          <span class="tag">2025</span>
+          <span class="tag">Project</span>
+          <span class="tag">Japan</span>
+        </div>
+      </div>
+    </div>
+            <div class="post-box" data-tags="2026  Project learning Coding">
+      <a href="/blog/XIAOESP" class="post-box-image-link">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/dd/%E3%82%B4%E3%83%BC%E3%83%AB%E3%83%89%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5.jpg" alt="View from Burj Khalifa" loading="lazy">
+      </a>
+      <div class="post-box-content">
+        <h3 class="post-box-title">
+          <a href="/blog/XIAOESP">seeed esp32 xiao s3で遊ぶ</a>
+        </h3>
+        <div class="post-box-tags">
+          <span class="tag">2026</span>
+          <span class="tag">Project</span>
+          <span class="tag">coding</span>
+        </div>
+      </div>
+    </div>
+  
+  <!-- <div class="post-box" data-tags="2025 Japan Project learning Coding">
+      <a href="/monkeytyping" class="post-box-image-link">
+        <img src="/blog/S__5431315_0.jpg" alt="View from Burj Khalifa" loading="lazy">
+      </a>
+      <div class="post-box-content">
+        <h3 class="post-box-title">
+          <a href="/monkeytyping">Random though -- infinite monkey volume control</a>
+        </h3>
+        <div class="post-box-tags">
+          <span class="tag">2025</span>
+          <span class="tag">Project</span>
+          <span class="tag">Coding</span>
+        </div>
+        
+      </div>
+     
+      
+      
+      
+    </div> -->
+<script>
+  // Original JavaScript for filtering
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterYear = document.getElementById('filter-year');
+    const filterRegion = document.getElementById('filter-region');
+    const filterType = document.getElementById('filter-type');
+    const randomBtn = document.getElementById('random-btn');
+    const postGrid = document.getElementById('post-grid');
+    const posts = Array.from(postGrid.getElementsByClassName('post-box'));
+
+    function filterPosts() {
+      const selectedYear = filterYear.value;
+      const selectedRegion = filterRegion.value;
+      const selectedType = filterType.value.split(' ')[0];
+
+      posts.forEach(post => {
+        const postTags = post.dataset.tags;
+        const yearMatch = selectedYear === 'all' || postTags.includes(selectedYear);
+        const regionMatch = selectedRegion === 'all' || postTags.includes(selectedRegion);
+        const typeMatch = selectedType === 'all' || postTags.includes(selectedType);
+
+        if (yearMatch && regionMatch && typeMatch) {
+          post.classList.remove('hidden');
+        } else {
+          post.classList.add('hidden');
+        }
+      });
+    }
+    
+    function showRandomPost() {
+        posts.forEach(post => post.classList.add('hidden'));
+        const randomIndex = Math.floor(Math.random() * posts.length);
+        posts[randomIndex].classList.remove('hidden');
+    }
+
+    filterYear.addEventListener('change', filterPosts);
+    filterRegion.addEventListener('change', filterPosts);
+    filterType.addEventListener('change', filterPosts);
+    randomBtn.addEventListener('click', showRandomPost);
+
+    // --- ADDED: JavaScript for Theme Toggle ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Function to apply the saved theme
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        } else {
+            body.classList.remove('dark-mode');
+            themeToggle.textContent = '🌙';
+        }
+    };
+
+    // Check for saved theme in localStorage
+    const savedTheme = localStorage.getItem('theme');
+    applyTheme(savedTheme);
+
+    // Event listener for the toggle button
+    themeToggle.addEventListener('click', () => {
+        let newTheme;
+        if (body.classList.contains('dark-mode')) {
+            newTheme = 'light';
+        } else {
+            newTheme = 'dark';
+        }
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+  });
+</script>
+
+</body>
+</html>

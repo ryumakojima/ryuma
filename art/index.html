@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryuma's Art Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --accent: #0066cc;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: #333;
+        }
+
+        /* ================================================= */
+        /* === START: UPDATED HEADER CSS (for consistency) === */
+        /* ================================================= */
+        header {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-bottom: 1px solid #dddddd;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            /* Added padding for consistency */
+            padding: 1rem; 
+        }
+
+        .portrait {
+            width: 100px; /* Standardized size */
+            height: 100px; /* Standardized size */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            margin: 0.5rem 0 0;
+            font-size: 1.8rem;
+        }
+        
+        .status {
+            color: #666;
+            margin: 0.5rem 0 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 0.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            /* Added background and border for button look */
+            border: 1px solid #eee;
+            background: #f8f8f8;
+        }
+
+        .nav-link:hover {
+            color: #0066cc;
+            border-color: #d0e3ff;
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
+
+        @media (min-width: 600px) {
+            .header-nav {
+                gap: 2rem;
+            }
+            .nav-link {
+                padding: 0.5rem 1.2rem;
+            }
+        }
+        /* =============================================== */
+        /* === END: UPDATED HEADER CSS === */
+        /* =============================================== */
+        
+        /* Gallery Styles */
+        .gallery {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        /* Art Grid */
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .art-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .art-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .art-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .art-info {
+            padding: 1rem;
+        }
+        
+        .art-title {
+            margin: 0;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .art-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            background: #f3f3f3;
+            border-radius: 12px;
+        }
+        
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 4px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 600px) {
+            .art-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                gap: 0.5rem;
+            }
+            
+            .filter-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&name=small" 
+                 alt="Ryuma Kojima" 
+                 class="portrait">
+            <h1>Ryuma Kojima</h1>
+            <p class="status">Highschool Year 12 Student (as of 2025)</p>
+            
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="/blog" class="nav-link">Blog!!</a> 
+                <a href="/makerport" class="nav-link">Projects</a>
+                <a href="/art" class="nav-link">Art Gallery</a>
+               
+            </nav>
+        </div>
+    </header>
+    
+    <div class="gallery">
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="flags">Flags</button>
+            <button class="filter-btn" data-filter="portraits">Portraits</button>
+            <button class="filter-btn" data-filter="other">Other</button>
+        </div>
+        
+        <div class="art-grid">
+            <div class="art-item" data-category="flags">
+                <img src="https://pbs.twimg.com/media/GnJRG2ObgAIlkt4?format=jpg&name=240x240" 
+                     alt="Australian Flag Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Australian Flag</h3>
+                    <span class="art-category">Flag</span>
+                </div>
+            </div>
+               <!-- 猿のタイプライター -->
+            <div class="art-item" data-category="other">
+                <img src="/illust/IMG_7564%20(1).jpg" 
+                     alt="Monkey Typewriter" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Monkey typewriter (Infinite monkey one)</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+
+            <!-- ポールマッカートニー -->
+            <div class="art-item" data-category="portraits">
+                <img src="/illust/IMG_8897.jpg" 
+                     alt="Paul McCartney" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Paul mccartney</h3>
+                    <span class="art-category">Portrait</span>
+                </div>
+            </div>
+            <div class="art-item" data-category="flags">
+                <img src="https://pbs.twimg.com/media/GnJRGy2bgAE1VhA?format=jpg&name=small" 
+                     alt="German Flag Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">German Flag</h3>
+                    <span class="art-category">Flag</span>
+                </div>
+            </div>
+            
+            <div class="art-item" data-category="flags">
+                <img src="https://pbs.twimg.com/media/GnJPRIWbgAQPtLA?format=jpg&name=240x240" 
+                     alt="Japanese Flag Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Japanese Flag</h3>
+                    <span class="art-category">Flag</span>
+                </div>
+            </div>
+            
+            <div class="art-item" data-category="flags">
+                <img src="https://pbs.twimg.com/media/GnJQ7LkaAAAS20O?format=jpg&name=240x240" 
+                     alt="Tanzanian Flag Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Tanzanian Flag</h3>
+                    <span class="art-category">Flag</span>
+                </div>
+            </div>
+            
+            <div class="art-item" data-category="flags">
+                <img src="https://pbs.twimg.com/media/GnJQ7LlbgAYAsJH?format=jpg&name=240x240" 
+                     alt="UAE Flag Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">UAE Flag</h3>
+                    <span class="art-category">Flag</span>
+                </div>
+            </div>
+            
+            <div class="art-item" data-category="other">
+                <img src="https://pbs.twimg.com/media/GnJQLRwbgAMEQ_H?format=jpg&name=small" 
+                     alt="C++ Logo Art" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">C++ Logo</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+                  <div class="art-item" data-category="other">
+                <img src="/S__3997704_0.jpg" 
+                     alt="Arduino" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Arduino</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+
+                        <!-- Tokyo -->
+            <div class="art-item" data-category="other">
+                <img src="https://pbs.twimg.com/media/GnS2pTSbsAA2Nk1?format=jpg&name=medium" 
+                     alt="Tokyo" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Tokyo</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+
+            <!-- Earth -->
+            <div class="art-item" data-category="other">
+                <img src="https://pbs.twimg.com/media/GnS2qGHbYAA1_t7?format=jpg&name=240x240" 
+                     alt="Earth" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Earth</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+
+            <!-- 論語＋＋ -->
+            <div class="art-item" data-category="other">
+                <img src="/random%20pgoto/IMG_8871.jpeg" 
+                     alt="論語＋＋" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">論語＋＋</h3>
+                    <span class="art-category">Other</span>
+                </div>
+            </div>
+
+         
+
+            <div class="art-item" data-category="portraits">
+                <img src="https://pbs.twimg.com/media/GnJQLR1bcAAxfy1?format=jpg&name=360x360" 
+                     alt="Self-Portrait" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Self-Portrait</h3>
+                    <span class="art-category">Portrait</span>
+                </div>
+            </div>
+            
+            <div class="art-item" data-category="portraits">
+                <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&name=small" 
+                     alt="Self-Portrait Variation" 
+                     class="art-image">
+                <div class="art-info">
+                    <h3 class="art-title">Self-Portrait Variation</h3>
+                    <span class="art-category">Portrait</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-img">
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 Ryuma Kojima. All artworks created by me.</p>
+    </footer>
+    
+    <script>
+        // Filter Functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.art-item').forEach(item => {
+                    if (filter === 'all' || item.dataset.category.toLowerCase() === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Lightbox Functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const closeBtn = document.querySelector('.lightbox-close');
+        
+        document.querySelectorAll('.art-image').forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.style.display = 'flex';
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+            });
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+            }
+        });
+        
+        // Close with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                lightbox.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

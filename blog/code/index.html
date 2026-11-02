@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>randome thoughts -- sorting</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* --- MODIFIED: 基本スタイルの調整 --- */
+  body {
+    background-color: #f0f0f0;
+    /* MODIFIED: クロスプラットフォームで読みやすいフォントに変更 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #333;
+    margin: 0;
+  }
+  
+  /* ================================= */
+  /* === ヘッダー用のCSS (変更なし) === */
+  /* ================================= */
+
+  header {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 20px;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .portrait {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+  }
+
+  .status {
+    color: #666;
+    margin: 0.5rem 0 1.5rem;
+    font-size: 1rem;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 0.5rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+    background: #f8f8f8;
+  }
+
+  .nav-link:hover {
+    color: #0066cc;
+    border-color: #d0e3ff;
+    background: #f0f7ff;
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 600px) {
+    .header-nav {
+        gap: 2rem;
+    }
+    .nav-link {
+        padding: 0.5rem 1.2rem;
+    }
+  }
+
+  /* =============================== */
+  /* === ここまでヘッダー用のCSS === */
+  /* =============================== */
+  
+  /* New Layout Styles */
+  .page-wrapper {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+  }
+
+  .sidebar .toc-box {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 15px;
+  }
+  
+  .sidebar h3 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.9em;
+  }
+
+  .sidebar ul ul {
+    padding-left: 20px;
+  }
+
+  .sidebar li {
+    margin-bottom: 8px;
+  }
+
+  .main-content {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  /* Original Container Style */
+  .container {
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+
+  /* Typography and Element Styles */
+  h1 {
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Chapter Style (章) */
+  .chapter {
+    font-size: 1.8em;
+    color: #444;
+    text-align: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 15px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+
+  /* Section Style (節) */
+  .section {
+    font-size: 1.4em;
+    color: #444;
+    border-left: 5px solid #008080;
+    padding-left: 15px;
+    margin-top: 40px;
+  }
+
+  p {
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  .meta-info {
+    text-align: right;
+    color: #666;
+    font-size: 0.9em;
+  }
+
+  a {
+    color: #008080;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* New Image and Caption Styles */
+  figure {
+    margin: 30px auto;
+    width: 70%;
+  }
+
+  figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #ddd;
+  }
+
+  figcaption {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 8px;
+  }
+  
+  .top-toc {
+      border: 1px solid #eee;
+      background-color: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 40px;
+  }
+  
+  /* ============================================= */
+  /* === ADDED: C++コード表示用のスタイル === */
+  /* ============================================= */
+  pre {
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+      padding: 15px;
+      overflow-x: auto; /* コードが長い場合に横スクロール */
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      line-height: 1.5;
+      margin: 20px 0;
+      border-radius: 4px;
+  }
+
+  /* インライン（文中）のコード用 */
+  code {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #e9e9e9;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 0.9em;
+  }
+
+  /* ============================================= */
+  /* === NEW: 引用 (Blockquote) 用のスタイル === */
+  /* ============================================= */
+  blockquote {
+    background-color: #f9f9f9;
+    border-left: 5px solid #ccc;
+    margin: 25px 0;
+    padding: 15px 20px;
+    font-style: italic;
+  }
+  blockquote p {
+    margin: 0;
+  }
+  blockquote footer {
+    font-style: normal;
+    font-size: 0.9em;
+    color: #555;
+    text-align: right;
+    margin-top: 10px;
+  }
+  
+  /* ================================================== */
+  /* === ADDED FOR MOBILE: スマートフォン用のスタイル === */
+  /* ================================================== */
+  @media (max-width: 768px) {
+    .page-wrapper {
+        /* 横並びから縦積みに変更 */
+        flex-direction: column;
+        padding: 0 15px;
+    }
+    
+    .sidebar {
+        /* サイドバーを通常の要素に戻す */
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    .main-content {
+        width: 100%;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    /* 本文中の目次はスマホでは非表示にする（サイドバーの目次が上に来るため） */
+    .top-toc {
+        display: none;
+    }
+    
+    /* 見出しの文字サイズを少し小さくする */
+    .chapter {
+        font-size: 1.5em;
+    }
+    
+    .section {
+        font-size: 1.2em;
+    }
+    
+    /* 画像の幅を広げて見やすくする */
+    figure {
+        width: 100%;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&amp;name=small" 
+      alt="Ryuma Kojima" 
+      class="portrait">
+        <h1 style="font-size: 1.5em; margin: 0.5em 0;">Ryuma Kojima</h1>
+        <p class="status">Highschool Year 12 Student (as of 2025)</p>
+        
+        <nav class="header-nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/blog" class="nav-link">Blog!!</a> 
+            <a href="/project" class="nav-link">Projects</a>
+            <a href="/art" class="nav-link">Art Gallery</a>
+            <a href="https://zernet.neocities.org" class="nav-link">ZERNET (english Teaching programme) </a>
+        </nav>
+    </div>
+</header>
+
+
+<div class="page-wrapper">
+  
+  <main class="main-content">
+    <div class="container">
+      <h1>Random thoughts - tall poppy Sorting</h1>
+      <p class="meta-info">Ryuma Kojima<br>09/11/2025</p>
+
+      <h2 class="chapter" id="c1">shower sorts</h2>
+
+      <p>
+        I just finished my early action for uni and I have bit of free time right now. I saw stalin sort on the internet few years ago and I always wanted to make my own one. This is also <a href="https://ja.wikipedia.org/wiki/%E5%82%99%E5%BF%98%E9%8C%B2" target="_blank" rel="noopener noreferrer">備忘録</a>(This also serves as a personal memo) since I recently learned vector on C++ and I thought I can use what I learned there.
+      </p>
+
+      <p>First, what is "tall poppy syndrome"? It's the concept I'm naming my sort after. Wikipedia defines it as:</p>
+      <blockquote>
+        <p>"people with notable public success or achievements that are ostracised by others as a form of egalitarianism."</p>
+        <footer>— <a href="https://en.wikipedia.org/wiki/Tall_poppy_syndrome" target="_blank" rel="noopener noreferrer">Wikipedia</a></footer>
+      </blockquote>
+      <h3 class="section" id="s1-1">tall poppy sorting (First Attempt)</h3>
+      <p>
+        My idea was this: get the last '要素' (element) and if the <code>vector.at(last - 1)</code> is bigger than last one it is going to be <code>vector.at(n) = vector.at(n + 1) - 1;</code>
+      </p>
+      <p>And here is the code:</p>
+      
+      <pre><code>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, sum = 0;
+    cin >> n;
+    vector<int> data(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> data.at(i);
+        sum += data.at(i);
+    }
+    
+    int last = data.at(n - 1);
+    
+    for (int a = n - 2; a >= 0; a--) {
+        if (data.at(a) > last) {
+            data.at(a) = data.at(a + 1) - 1;
+        }
+    }
+    
+    for (int i = 0; i < n; i++) {
+        cout << data.at(i) << endl;
+    }
+}
+
+      </code></pre>
+
+      <p>
+        But here is the problem. If the integers is <code>10, 1, 30</code> the output gonna be same. Not really sorting anything.
+      </p>
+
+      <h3 class="section" id="s1-2">Revised Code (Second Attempt)</h3>
+      <p>
+        I revised my code to, though I know this is such a stupid idea, loop the whole process. If the set were<code>10, 1, 30</code>, first I define <code>int last</code> as 30 and kinda "sort" and then redefine <code>last</code> as 1 and re"sort" again and so on so it is going to be <code>10, 1, 30</code> → <code>0, 1, 30</code>.
+      </p>
+      <p>Here is the code:</p>
+      
+      <pre><code>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, sum = 0;
+    cin >> n;
+     vector<int> data(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> data.at(i);
+        sum += data.at(i);
+    }
+    
+    for (int a = n - 2; a >= 0; a--) {
+        if (data.at(a) > data.at(a + 1)) { 
+            data.at(a) = data.at(a + 1) - 1;
+        }
+     }
+    
+    for (int i = 0; i < n; i++) {
+        cout << data.at(i) << endl;
+    }
+}
+      </code></pre>
+   <p>
+       It is order O(n) but not really practical anyway.
+      </p>
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

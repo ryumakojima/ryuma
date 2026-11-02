@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects | Ryuma Kojima</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --accent: #0066cc;
+            --text: #333;
+            --light-text: #666;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+        
+        /* Consistent Header */
+        header {
+            background-color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .portrait {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0.5rem 0 0;
+            font-size: 1.8rem;
+        }
+        
+        .status {
+            color: var(--light-text);
+            margin: 0.3rem 0 1rem;
+            font-size: 1rem;
+        }
+        
+        .header-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent);
+            background-color: rgba(0, 102, 204, 0.05);
+        }
+        
+        .nav-link.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        /* Projects Section */
+        .projects-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+        }
+        
+        .project-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        
+        .project-title {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .project-subtitle {
+            margin: 0.3rem 0 0;
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f7ff;
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid #d0e3ff;
+        }
+        
+        .project-link:hover {
+            background: #e0f0ff;
+        }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--light-text);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 600px) {
+            .project-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .project-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Consistent Header -->
+  <header>
+            <div class="header-content">
+                <img src="https://pbs.twimg.com/media/GnJQLRyaAAAtVDx?format=jpg&amp;name=small" 
+                     alt="Ryuma Kojima" 
+                     class="portrait">
+                <h1>Ryuma Kojima</h1>
+                <p class="status">Highschool Year 12 Student (as of 2025)</p>
+                
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="/blog" class="nav-link">Blog!!</a> 
+                    <a href="/project" class="nav-link">Projects</a>
+                    <a href="/art" class="nav-link">Art Gallery</a>
+                    <a href="https://gmtcjapan.com/" class="nav-link">GMTC STEM teaching initiative </a>
+                </nav>
+            </div>
+        </header>
+    
+    <!-- Projects Content -->
+    <div class="projects-container">
+            <div class="project-card">
+            <div class="project-header">
+                <img src="../assets/IMG_8891.jpg" 
+                     alt="ZERNET Logo" 
+                     class="project-logo">
+                <div>
+                    <h2 class="project-title">TeleMacc</h2>
+                    <p class="project-subtitle">Open-Sourcing the delivery Robot</p>
+                </div>
+                <div class="project-links">
+                <a href="https://ramenismymen.github.io/ryuma/telemacc" class="project-link" target="_blank">
+                    Website
+                </a>
+  </div>
+</div>
+            </div>
+        <!-- GMT Project -->
+        <div class="project-card">
+            <div class="project-header">
+                <img src="/GMTC%20LOGO.PNG" 
+                     alt="GMTC Logo" 
+                     class="project-logo">
+                <div>
+                    <h2 class="project-title">Global Mochi Tech (GMT)</h2>
+                    <p class="project-subtitle">Student Engineering Group</p>
+                </div>
+            </div>
+            
+            <p>We're a student-led technology group focused on innovative engineering projects and global collaboration.</p>
+            <p><strong>Status:</strong> Recently launched and growing!</p>
+            
+            <div class="project-links">
+                <a href="https://gmtcjapan.com/" class="project-link" target="_blank">
+                  Website
+                </a>
+
+            </div>
+        </div>
+          <!-- GMT Project -->
+
+  
+        
+    </div>
+    
+    <footer>
+        <p>© 2025 Ryuma Kojima. All projects are ongoing works.</p>
+    </footer>
+</body>
+</html>
